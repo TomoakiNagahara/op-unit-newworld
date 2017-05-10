@@ -6,7 +6,7 @@
  *
  * @creation  2009-09-27 at Kozhikode in India.
  * @version   1.0
- * @package   core
+ * @package   unit-newworld
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */

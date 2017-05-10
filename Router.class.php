@@ -4,7 +4,7 @@
  *
  * @creation  2017-05-09
  * @version   1.0
- * @package   core
+ * @package   unit-newworld
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
@@ -13,7 +13,7 @@
  *
  * @creation  2015-01-30 --> 2016-11-26
  * @version   1.0
- * @package   core
+ * @package   unit-newworld
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
