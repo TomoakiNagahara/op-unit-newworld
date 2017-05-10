@@ -10,8 +10,13 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-
 //	...
-foreach(['Dispatcher','Http','Layout','Router','Template'] as $name){
-	include(__DIR__."/{$name}.class.php");
+foreach(['Dispatcher','Layout','Router','Template'] as $name){
+	$path = __DIR__."/{$name}.class.php";
+	if( file_exists($path) ){
+		include($path);
+	}else{
+		throw new Exception("Does not found this file. ($path)");
+	}
 }
+return true;
