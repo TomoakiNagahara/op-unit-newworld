@@ -74,11 +74,9 @@ class Layout
 	static function Run($content)
 	{
 		//	Search layout controller.
-		if(!$file_path = self::_GetLayoutController()){
-			return false;
+		if( $file_path = self::_GetLayoutController() ){
+			//	Execute layout.
+			Template::Run($file_path, ['content'=>$content]);
 		}
-
-		//	...
-		Template::Run($file_path, ['content'=>$content]);
 	}
 }
