@@ -78,5 +78,33 @@ class Layout
 			//	Execute layout.
 			Template::Run($file_path, ['content'=>$content]);
 		}
+
+		//	Change mime by extension.
+		if( preg_match('/\.(\w*)$/', $file_path, $match) ){
+			switch( $mime = $match[1] ){
+				case 'php':
+				case 'html':
+					$mime = 'text/html';
+					break;
+
+				case 'js':
+					$mime = 'text/javascript';
+					break;
+
+				case 'css':
+					$mime = 'text/css';
+					break;
+
+				default:
+					Notice::Set("Does not match this extension. ($mime)");
+					$mime = 'text/plain';
+			}
+		}
+
+		//	...
+		Http::Mime($mime);
+
+		//	...
+		Template::Run($file_path, ['content'=>$content]);
 	}
 }
