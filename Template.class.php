@@ -92,6 +92,12 @@ class Template
 	{
 		try {
 			//	...
+			if(!$file_path){
+				Notice::Set("Has not been set file path. ($file_path)");
+				return;
+			}
+
+			//	...
 			if(!file_exists($file_path) ){
 				//	...
 				if(!$file_path = self::_GetTemplateFilePath($file_path)){
