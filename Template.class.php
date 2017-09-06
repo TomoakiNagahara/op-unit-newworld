@@ -120,7 +120,7 @@ class Template
 			chdir( dirname($file_path) );
 
 			//	...
-			include( basename($file_path) );
+			$io = include( basename($file_path) );
 
 			//	...
 			chdir($save);
@@ -133,5 +133,8 @@ class Template
 			array_unshift($trace, $temp);
 			Notice::Set($e->getMessage(), $trace);
 		}
+
+		//	...
+		return $io === false ? false: null;
 	}
 }
