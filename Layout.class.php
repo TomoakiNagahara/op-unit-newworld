@@ -58,7 +58,11 @@ class Layout
 
 		//	Check exists layout controller.
 		if(!file_exists($full_path)){
-			$message = "Does not exists layout controller. ($full_path)";
+			if( $io = file_exists( dirname($full_path) ) ){
+				$message = "Does not exists layout controller. ($full_path)";
+			}else{
+				$message = "Does not exists layout directory. ($layout_name)";
+			}
 			Notice::Set($message, debug_backtrace());
 			return false;
 		}
