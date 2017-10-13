@@ -64,6 +64,7 @@ class Router
 
 		//	Generate real full path.
 		$full_path = $_SERVER['DOCUMENT_ROOT'].$_SERVER['REQUEST_URI'];
+		$full_path = str_replace('\\', '/', $full_path); // For Windows
 
 		//	Check url query.
 		if( $pos = strpos($full_path, '?') ){
@@ -87,18 +88,18 @@ class Router
 		}
 
 		//	Added slash to tail. /www/foo/bar --> /www/foo/bar/
-		$full_path = rtrim($full_path,DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+		$full_path = rtrim($full_path, '/').'/';
 
 		//	...
 		$uri = str_replace($_OP[APP_ROOT], '', $full_path);
 
 		//	...
-		$dirs = explode('/', rtrim($uri, DIRECTORY_SEPARATOR));
+		$dirs = explode('/', rtrim($uri, '/'));
 
 		//	...
 		do{
 			//	...
-			$path = trim(join(DIRECTORY_SEPARATOR, $dirs).'/'.$file, DIRECTORY_SEPARATOR);
+			$path = trim(join(DIRECTORY_SEPARATOR, $dirs).DIRECTORY_SEPARATOR.$file, DIRECTORY_SEPARATOR);
 
 			//	...
 			if( isset($dir) ){
