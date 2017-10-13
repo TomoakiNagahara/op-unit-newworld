@@ -88,13 +88,16 @@ class Router
 		}
 
 		//	Added slash to tail. /www/foo/bar --> /www/foo/bar/
-		$full_path = rtrim($full_path, '/').'/';
+	//	$full_path = rtrim($full_path, '/').'/';
 
-		//	...
+		//	Remove application root: /www/htdocs/api/foo/bar/ --> api/foo/bar/
 		$uri = str_replace($_OP[APP_ROOT], '', $full_path);
 
-		//	...
-		$dirs = explode('/', rtrim($uri, '/'));
+		//	Remove slash from tail: api/foo/bar/ --> api/foo/bar
+		$uri  = rtrim($uri, '/');
+
+		//	/foo/bar --> ['foo','bar']
+		$dirs = explode('/', $uri);
 
 		//	...
 		do{
