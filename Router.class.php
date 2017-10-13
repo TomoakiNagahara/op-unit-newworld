@@ -116,7 +116,7 @@ class Router
 			}
 
 			//	...
-		}while( $dir = array_pop($dirs) );
+		}while( false !== $dir = array_pop($dirs) );
 
 		//	Return route table.
 		return self::$_route;
