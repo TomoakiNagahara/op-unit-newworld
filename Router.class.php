@@ -64,7 +64,7 @@ class Router
 
 		//	Generate real full path.
 		$full_path = $_SERVER['DOCUMENT_ROOT'].$_SERVER['REQUEST_URI'];
-		$full_path = str_replace('\\', '/', $full_path); // For Windows
+	//	$full_path = str_replace('\\', '/', $full_path); // For Windows
 
 		//	Check url query.
 		if( $pos = strpos($full_path, '?') ){
