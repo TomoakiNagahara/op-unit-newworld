@@ -135,6 +135,6 @@ class Template
 		}
 
 		//	...
-		return $io === false ? false: null;
+		return ifset($io) === false ? false: null;
 	}
 }
