@@ -71,6 +71,15 @@ class Layout
 		return $full_path;
 	}
 
+	static function Execute($io=null)
+	{
+		if( $io ){
+			Env::Get( self::_EXECUTE_, $io );
+		}
+
+		return Env::Get( self::_EXECUTE_ );
+	}
+
 	/** Execute layout.
 	 *
 	 * @param string $content
