@@ -71,22 +71,28 @@ class Layout
 		return $full_path;
 	}
 
+	/** Get/Set Layout execution.
+	 *
+	 * @param  $io
+	 */
 	static function Execute($io=null)
 	{
 		if( $io ){
-			Env::Get( self::_EXECUTE_, $io );
+			Env::Set(self::_EXECUTE_, $io);
 		}
-
-		return Env::Get( self::_EXECUTE_ );
+		return Env::Get(self::_EXECUTE_);
 	}
 
+	/** Get/Set Layout name.
+	 *
+	 * @param  $io
+	 */
 	static function Name($name=null)
 	{
 		if( $name ){
-			Env::Get( self::_NAME_, $name );
+			Env::Set(self::_NAME_, $name);
 		}
-
-		return Env::Get( self::_NAME_ );
+		return Env::Get(self::_NAME_);
 	}
 
 	/** Execute layout.
