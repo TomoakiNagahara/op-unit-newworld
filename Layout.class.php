@@ -78,7 +78,7 @@ class Layout
 	static function Run($content)
 	{
 		//	...
-		Http::Mime('text/html');
+		Http::Mime('text/html', true);
 
 		//	Search layout controller.
 		if( $file_path = self::_GetLayoutController() ){
