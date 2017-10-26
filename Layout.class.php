@@ -80,6 +80,15 @@ class Layout
 		return Env::Get( self::_EXECUTE_ );
 	}
 
+	static function Name($name=null)
+	{
+		if( $name ){
+			Env::Get( self::_NAME_, $name );
+		}
+
+		return Env::Get( self::_NAME_ );
+	}
+
 	/** Execute layout.
 	 *
 	 * @param string $content
