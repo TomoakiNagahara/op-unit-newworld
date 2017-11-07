@@ -77,7 +77,7 @@ class Layout
 	 */
 	static function Execute($io=null)
 	{
-		if( $io ){
+		if( $io !== null ){
 			Env::Set(self::_EXECUTE_, $io);
 		}
 		return Env::Get(self::_EXECUTE_);
