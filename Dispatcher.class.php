@@ -28,7 +28,7 @@ class Dispatcher
 	 *
 	 * @return string
 	 */
-	static function Run()
+	static function Auto()
 	{
 		//	Execute app's end point. (app's controller)
 		$route = Router::Get();

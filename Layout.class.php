@@ -119,7 +119,7 @@ class Layout
 	 *
 	 * @param string $content
 	 */
-	static function Run($content)
+	static function Auto($content)
 	{
 		//	...
 		Http::Mime('text/html', true);
