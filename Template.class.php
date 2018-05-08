@@ -23,12 +23,6 @@ class Template
 	 */
 	use OP_CORE;
 
-	/** Search to this template directory.
-	 *
-	 * @var string
-	 */
-	const _DIRECTORY_ = 'template-dir';
-
 	/** Return real file path from meta path.
 	 *
 	 * @param  string
