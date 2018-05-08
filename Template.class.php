@@ -114,21 +114,27 @@ class Template
 			}
 
 			//	...
-			if( $args ){
-				if(!$count = extract($args, null, null)){
-					$message = "Passed arguments is not an assoc array. (count=$count)";
-					Notice::Set($message, debug_backtrace());
-				}
-			}
-
-			//	...
 			$save = getcwd();
 
 			//	...
 			chdir( dirname($file_path) );
 
-			//	...
-			$io = include( basename($file_path) );
+			//	Limit the scope of variables.
+			call_user_func(function($file_path, $args) {
+				//	If a variable is passed.
+				if( $args ){
+					//	Extract to variable.
+					if(!$count = extract($args, null, null)){
+						//	Maybe not assoc.
+						$message = "Passed arguments is not an assoc array. (count=$count)";
+						\Notice::Set($message, debug_backtrace());
+					}
+				}
+
+				//	Execute file. (Do output)
+				include( basename($file_path) );
+
+			}, $file_path, $args);
 
 			//	...
 			chdir($save);
