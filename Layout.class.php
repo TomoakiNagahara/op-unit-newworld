@@ -24,14 +24,6 @@ class Layout
 	 */
 	use OP_CORE;
 
-	/** Constants
-	 *
-	 * @var string
-	 */
-	const _EXECUTE_		 = 'layout-execute';
-	const _DIRECTORY_	 = 'layout-dir';
-	const _NAME_		 = 'layout-name';
-
 	/** Get layout controller.
 	 *
 	 * @return $string
@@ -39,14 +31,14 @@ class Layout
 	static private function _GetLayoutController()
 	{
 		//	Get layout directory.
-		if(!$layout_dir  = Env::Get(Layout::_DIRECTORY_)){
+		if(!$layout_dir = self::Directory() ){
 			$message = "Has not been set layout directory.";
 			Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
 		//	Get layout name.
-		if(!$layout_name = Env::Get(Layout::_NAME_)){
+		if(!$layout_name = self::Name() ){
 			$message = "Has not been set layout name.";
 			Notice::Set($message, debug_backtrace());
 			return false;
@@ -73,26 +65,54 @@ class Layout
 
 	/** Get/Set Layout execution.
 	 *
-	 * @param  $io
+	 * @param  boolean $execute
+	 * @return boolean $execute
 	 */
 	static function Execute($io=null)
 	{
-		if( $io !== null ){
-			Env::Set(self::_EXECUTE_, $io);
+		return self::_Store(__METHOD__, $io);
+	}
+
+	/** Get/Set Layout directory.
+	 *
+	 * @param  string $path
+	 * @return string $path
+	 */
+	static function Directory($path=null)
+	{
+		//	...
+		if( $path ){
+			$path = ConvertPath($path);
+			$path = rtrim($path, '/') . '/';
+
+			//	...
+			_GetRootsPath('layout', $path);
 		}
-		return Env::Get(self::_EXECUTE_);
+
+		//	...
+		return self::_Store(__METHOD__, $path);
 	}
 
 	/** Get/Set Layout name.
 	 *
-	 * @param  $io
+	 * @param  string $name
+	 * @return string $name
 	 */
 	static function Name($name=null)
 	{
 		if( $name ){
-			Env::Set(self::_NAME_, $name);
+			//	...
+			$dir = self::Directory();
+
+			//	...
+			$list = _GetRootsPath('layout', $dir . $name);
+
+		}else if( $name === false ){
+
 		}
-		return Env::Get(self::_NAME_);
+
+		//	...
+		return self::_Store(__METHOD__, $name);
 	}
 
 	/** Execute layout.
