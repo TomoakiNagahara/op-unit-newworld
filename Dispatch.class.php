@@ -23,14 +23,14 @@ namespace OP\UNIT\NEWWORLD;
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-class Dispatcher
+class Dispatch
 {
 	/** trait
 	 *
 	 */
 	use \OP_CORE;
 
-	/** Execute end-point.
+	/** Execute end-point and get end-point result.
 	 *
 	 * @return string
 	 */
