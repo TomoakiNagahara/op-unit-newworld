@@ -9,6 +9,12 @@
  * @copyright Tomoaki Nagahara All right reserved.
  */
 
+/** namespace
+ *
+ * @created   2018-04-13
+ */
+namespace OP\UNIT\NEWWORLD;
+
 /** Layout
  *
  * @creation  2017-02-14
@@ -22,7 +28,7 @@ class Layout
 	/** trait.
 	 *
 	 */
-	use OP_CORE;
+	use \OP_CORE;
 
 	/** Get layout controller.
 	 *
@@ -33,14 +39,14 @@ class Layout
 		//	Get layout directory.
 		if(!$layout_dir = self::Directory() ){
 			$message = "Has not been set layout directory.";
-			Notice::Set($message, debug_backtrace());
+			\Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
 		//	Get layout name.
 		if(!$layout_name = self::Name() ){
 			$message = "Has not been set layout name.";
-			Notice::Set($message, debug_backtrace());
+			\Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
@@ -55,7 +61,7 @@ class Layout
 			}else{
 				$message = "Does not exists layout directory. ($layout_name)";
 			}
-			Notice::Set($message, debug_backtrace());
+			\Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
@@ -121,9 +127,6 @@ class Layout
 	 */
 	static function Auto($content)
 	{
-		//	...
-		Http::Mime('text/html', true);
-
 		//	Search layout controller.
 		if( $file_path = self::_GetLayoutController() ){
 			//	Execute layout.
