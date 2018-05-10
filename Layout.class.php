@@ -126,7 +126,7 @@ class Layout
 	 * @param  string $content
 	 * @return string $content
 	 */
-	static function Auto($content)
+	static function Get($content)
 	{
 		//	Do you want to run Layout?
 		if(!self::Execute()){

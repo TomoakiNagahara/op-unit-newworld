@@ -23,5 +23,5 @@ use OP\UNIT\NEWWORLD;
 $content = Dispatch::Get();
 
 //	The content is wrapped in the Layout.
-echo Layout::Auto($content);
+echo Layout::Get($content);
 ```
