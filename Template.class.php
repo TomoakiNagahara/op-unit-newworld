@@ -41,7 +41,7 @@ class Template
 		}
 
 		//	Search to in template directory.
-		if( $dir  = Env::Get(self::_DIRECTORY_) ){
+		if( $dir = self::Directory() ){
 			$path = rtrim(ConvertPath($dir), '/').'/'.$path;
 			if( file_exists($path) ){
 				//	File was found.
@@ -55,6 +55,20 @@ class Template
 		//	...
 		return '';
 	}
+
+	/** Get/Set template directory.
+	 *
+	 * @param  string $path
+	 * @return string $path
+	 */
+	static function Directory($path=null)
+	{
+		static $_directory;
+		if( $path ){
+			$_directory = rtrim(ConvertPath($path), '/').'/';
+		}
+		return $_directory;
+	} // Directory
 
 	/** Return executed file content.
 	 *
