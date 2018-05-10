@@ -121,16 +121,24 @@ class Layout
 		return self::_Store(__METHOD__, $name);
 	}
 
-	/** Execute layout.
+	/** The content is wrapped in the Layout.
 	 *
-	 * @param string $content
+	 * @param  string $content
+	 * @return string $content
 	 */
 	static function Auto($content)
 	{
-		//	Search layout controller.
-		if( $file_path = self::_GetLayoutController() ){
-			//	Execute layout.
-			Template::Run($file_path, ['content'=>$content]);
+		//	Do you want to run Layout?
+		if(!self::Execute()){
+			return $content;
 		}
+
+		//	Search layout controller.
+		if(!$file_path = self::_GetLayoutController() ){
+			return $content;
+		}
+
+		//	The content is wrapped in the Layout.
+		return Template::Get($file_path, ['content'=>$content]);
 	}
 }
