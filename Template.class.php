@@ -40,20 +40,23 @@ class Template
 			return $path;
 		}
 
-		//	Search to in template directory.
-		if( $dir = self::Directory() ){
-			$path = rtrim(ConvertPath($dir), '/').'/'.$path;
-			if( file_exists($path) ){
-				//	File was found.
-				return $path;
-			}
+		//	Get template directory.
+		if(!$dir = self::Directory() ){
+			Notice::Set("Has not been set template directory.");
+			return false;
+		}
+
+		//	Generate full path.
+		$path = $dir . $path;
+
+		//	Check file exists.
+		if(!file_exists($path) ){
+			Notice::Set("This file has not been found. ($path)");
+			return false;
 		}
 
 		//	...
-		Notice::Set("Does not exists this file path. ($path)");
-
-		//	...
-		return '';
+		return $path;
 	}
 
 	/** Get/Set template directory.
