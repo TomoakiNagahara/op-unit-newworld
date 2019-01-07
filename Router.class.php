@@ -30,7 +30,13 @@ class Router
 	 */
 	use \OP_CORE;
 
-	/** Use for route table's associative key name.
+	/** Use for route table's associative array key name.
+	 *
+	 * @var string
+	 */
+	const _ARGS_ = 'args';
+
+	/** Use for route table's associative array key name.
 	 *
 	 * @var string
 	 */
@@ -59,10 +65,8 @@ class Router
 	 */
 	static private function _InitRouteTable()
 	{
-		global $_OP;
-
 		//	...
-		$file  = 'index.php'; // Env::Get(Router::_END_POINT_FILE_NAME_, 'index.php');
+		global $_OP;
 
 		//	...
 		self::$_route = [];
@@ -75,7 +79,7 @@ class Router
 		//	Check url query.
 		if( $pos = strpos($full_path, '?') ){
 			//	Separate url query.
-			$query = substr($full_path, $pos+1);
+			/* $query = */ substr($full_path, $pos+1);
 			$full_path = substr($full_path, 0, $pos);
 		}
 
@@ -88,7 +92,7 @@ class Router
 			if( $extension === 'html' ){
 				if( file_exists($full_path) ){
 					self::$_route[Router::_END_POINT_] = $full_path;
-					return self::$_route;
+					return;
 				}
 			}
 		}
@@ -105,10 +109,13 @@ class Router
 		//	/foo/bar --> ['foo','bar']
 		$dirs = explode('/', $uri);
 
+		//	For Eclipse (Undefined error)
+		$dir = null;
+
 		//	...
 		do{
-			//	...
-			$path = trim(join(DIRECTORY_SEPARATOR, $dirs).DIRECTORY_SEPARATOR.$file, DIRECTORY_SEPARATOR);
+			//	['foo','bar'] --> foo/bar//index.php --> foo/bar/index.php
+			$path = trim(join(DIRECTORY_SEPARATOR, $dirs).DIRECTORY_SEPARATOR.'index.php', DIRECTORY_SEPARATOR);
 
 			//	...
 			if( isset($dir) ){
@@ -126,9 +133,6 @@ class Router
 
 			//	...
 		}while( false !== $dir = array_pop($dirs) );
-
-		//	Return route table.
-		return self::$_route;
 	}
 
 	/** Get dispatch route by request uri.
