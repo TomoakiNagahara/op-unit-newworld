@@ -1,6 +1,6 @@
 <?php
 /**
- * unit-newworld:/Dispatcher.class.php
+ * Dispatcher.class.php
  *
  * @creation  2017-05-09
  * @version   1.0
@@ -8,12 +8,6 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-
-/** namespace
- *
- * @created   2018-04-13
- */
-namespace OP\UNIT\NEWWORLD;
 
 /** Dispatcher
  *
@@ -23,38 +17,34 @@ namespace OP\UNIT\NEWWORLD;
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-class Dispatch
+class Dispatcher
 {
 	/** trait
 	 *
 	 */
-	use \OP_CORE;
+	use OP_CORE;
 
-	/** Execute end-point and get end-point result.
+	/** Execute end-point.
 	 *
-	 * @param  string $endpoint
 	 * @return string
 	 */
-	static function Get($endpoint=null)
+	static function Run()
 	{
-		//	Endpoint is not specified.
-		if(!$endpoint ){
-			//	Get default end-point.
-			$endpoint = Router::Get()[Router::_END_POINT_];
-		}
+		//	Execute app's end point. (app's controller)
+		$route = Router::Get();
 
 		//	Get current directory.
 		$cdir = getcwd();
 
 		//	Change current directory.
-		chdir(dirname($endpoint));
+		chdir(dirname($route[Router::_END_POINT_]));
 
 		//	Execute content.
 		try{
 			//	Execute end-point.
-			$content = Template::Get($endpoint);
-		}catch( \Exception $e ){
-			\Notice::Set($e);
+			$content = Template::Get($route[Router::_END_POINT_]);
+		}catch( Exception $e ){
+			Notice::Set($e->getMessage(), $e->getTrace());
 		}
 
 		//	Recovery current directory.

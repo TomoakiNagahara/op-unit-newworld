@@ -1,6 +1,6 @@
 <?php
 /**
- * unit-newworld:/Layout.class.php
+ * Layout.class.php
  *
  * @creation  2017-05-09
  * @version   1.0
@@ -8,12 +8,6 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-
-/** namespace
- *
- * @created   2018-04-13
- */
-namespace OP\UNIT\NEWWORLD;
 
 /** Layout
  *
@@ -28,7 +22,15 @@ class Layout
 	/** trait.
 	 *
 	 */
-	use \OP_CORE;
+	use OP_CORE;
+
+	/** Constants
+	 *
+	 * @var string
+	 */
+	const _EXECUTE_		 = 'layout-execute';
+	const _DIRECTORY_	 = 'layout-dir';
+	const _NAME_		 = 'layout-name';
 
 	/** Get layout controller.
 	 *
@@ -37,12 +39,16 @@ class Layout
 	static private function _GetLayoutController()
 	{
 		//	Get layout directory.
-		if(!$layout_dir = self::Directory() ){
+		if(!$layout_dir  = Env::Get(Layout::_DIRECTORY_)){
+			$message = "Has not been set layout directory.";
+			Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
 		//	Get layout name.
-		if(!$layout_name = self::Name() ){
+		if(!$layout_name = Env::Get(Layout::_NAME_)){
+			$message = "Has not been set layout name.";
+			Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
@@ -52,12 +58,12 @@ class Layout
 
 		//	Check exists layout controller.
 		if(!file_exists($full_path)){
-			if( file_exists( dirname($full_path) ) ){
+			if( $io = file_exists( dirname($full_path) ) ){
 				$message = "Does not exists layout controller. ($full_path)";
 			}else{
 				$message = "Does not exists layout directory. ($layout_name)";
 			}
-			\Notice::Set($message);
+			Notice::Set($message, debug_backtrace());
 			return false;
 		}
 
@@ -67,102 +73,41 @@ class Layout
 
 	/** Get/Set Layout execution.
 	 *
-	 * @param  boolean $execute
-	 * @return boolean $execute
+	 * @param  $io
 	 */
 	static function Execute($io=null)
 	{
-		//	...
-		static $_io = null;
-
-		//	...
 		if( $io !== null ){
-			//	...
-			$_io = $io;
-		};
-
-		//	...
-		return $_io;
-	}
-
-	/** Get/Set Layout directory.
-	 *
-	 * @param  string $path
-	 * @return string $path
-	 */
-	static function Directory($path=null)
-	{
-		//	...
-		static $_path = null;
-
-		//	...
-		if( $path ){
-			$path = ConvertPath($path);
-			$path = rtrim($path, '/') . '/';
-
-			//	...
-			_GetRootsPath('layout', $path);
-
-			//	...
-			$_path = $path;
+			Env::Set(self::_EXECUTE_, $io);
 		}
-
-		//	...
-		return $_path;
+		return Env::Get(self::_EXECUTE_);
 	}
 
 	/** Get/Set Layout name.
 	 *
-	 * @param  string $name
-	 * @return string $name
+	 * @param  $io
 	 */
 	static function Name($name=null)
 	{
-		//	...
-		static $_name = null;
-
-		//	...
 		if( $name ){
-			//	Get layout directory.
-			if(!$dir = self::Directory() ){
-				\Notice::Set("Has not been set layout directory.");
-			}
-
-			//	...
-			$_name = $name;
-
-			//	Reset meta path.
-			_GetRootsPath('layout', ConvertPath($dir . $_name));
+			Env::Set(self::_NAME_, $name);
 		}
-
-		//	...
-		if( $name !== null ){
-			//	...
-			self::Execute( $name ? true : false );
-		};
-
-		//	...
-		return $_name;
+		return Env::Get(self::_NAME_);
 	}
 
-	/** The content is wrapped in the Layout.
+	/** Execute layout.
 	 *
-	 * @param  string $content
-	 * @return string $content
+	 * @param string $content
 	 */
-	static function Get($content)
+	static function Run($content)
 	{
-		//	Do you want to run Layout?
-		if(!self::Execute()){
-			return $content;
-		}
+		//	...
+		Http::Mime('text/html', true);
 
 		//	Search layout controller.
-		if(!$file_path = self::_GetLayoutController() ){
-			return $content;
+		if( $file_path = self::_GetLayoutController() ){
+			//	Execute layout.
+			Template::Run($file_path, ['content'=>$content]);
 		}
-
-		//	The content is wrapped in the Layout.
-		return Template::Get($file_path, ['content'=>$content]);
 	}
 }

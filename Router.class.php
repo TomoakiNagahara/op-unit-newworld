@@ -1,6 +1,6 @@
 <?php
 /**
- * unit-newworld:/Router.class.php
+ * Router.class.php
  *
  * @creation  2017-05-09
  * @version   1.0
@@ -8,12 +8,6 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-
-/** namespace
- *
- * @created   2018-04-13
- */
-namespace OP\UNIT\NEWWORLD;
 
 /** Router
  *
@@ -28,15 +22,9 @@ class Router
 	/** trait.
 	 *
 	 */
-	use \OP_CORE;
+	use OP_CORE;
 
-	/** Use for route table's associative array key name.
-	 *
-	 * @var string
-	 */
-	const _ARGS_ = 'args';
-
-	/** Use for route table's associative array key name.
+	/** Use for route table's associative key name.
 	 *
 	 * @var string
 	 */
@@ -65,8 +53,10 @@ class Router
 	 */
 	static private function _InitRouteTable()
 	{
-		//	...
 		global $_OP;
+
+		//	...
+		$file  = 'index.php'; // Env::Get(Router::_END_POINT_FILE_NAME_, 'index.php');
 
 		//	...
 		self::$_route = [];
@@ -79,7 +69,7 @@ class Router
 		//	Check url query.
 		if( $pos = strpos($full_path, '?') ){
 			//	Separate url query.
-			/* $query = */ substr($full_path, $pos+1);
+			$query = substr($full_path, $pos+1);
 			$full_path = substr($full_path, 0, $pos);
 		}
 
@@ -92,7 +82,7 @@ class Router
 			if( $extension === 'html' ){
 				if( file_exists($full_path) ){
 					self::$_route[Router::_END_POINT_] = $full_path;
-					return;
+					return self::$_route;
 				}
 			}
 		}
@@ -109,13 +99,10 @@ class Router
 		//	/foo/bar --> ['foo','bar']
 		$dirs = explode('/', $uri);
 
-		//	For Eclipse (Undefined error)
-		$dir = null;
-
 		//	...
 		do{
-			//	['foo','bar'] --> foo/bar//index.php --> foo/bar/index.php
-			$path = trim(join(DIRECTORY_SEPARATOR, $dirs).DIRECTORY_SEPARATOR.'index.php', DIRECTORY_SEPARATOR);
+			//	...
+			$path = trim(join(DIRECTORY_SEPARATOR, $dirs).DIRECTORY_SEPARATOR.$file, DIRECTORY_SEPARATOR);
 
 			//	...
 			if( isset($dir) ){
@@ -123,19 +110,30 @@ class Router
 			}
 
 			//	...
-			$full_path = $_OP[APP_ROOT].$path;
-
-			//	...
-			if( file_exists($full_path) ){
-				self::$_route[Router::_END_POINT_] = $full_path;
+			if( file_exists($_OP[APP_ROOT].$path) ){
+				self::$_route[Router::_END_POINT_] = $_OP[APP_ROOT].$path;
 				break;
 			}
 
 			//	...
 		}while( false !== $dir = array_pop($dirs) );
+
+		//	Return route table.
+		return self::$_route;
 	}
 
-	/** Get dispatch route by request uri.
+	/** Get SmartURI arguments.
+	 *
+	 * @param  null|integer $i index
+	 * @return mixed
+	 */
+	static function Args($i=null)
+	{
+		$route = self::Get();
+		return $i === null ? $route['args']: ifset($route['args'][$i]);
+	}
+
+	/** Get generated route table from request uri.
 	 *
 	 * <pre>
 	 * Structure:

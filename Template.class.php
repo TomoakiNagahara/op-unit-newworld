@@ -1,6 +1,6 @@
 <?php
 /**
- * unit-newworld:/Template.class.php
+ * Template.class.php
  *
  * @creation  2017-05-09
  * @version   1.0
@@ -8,12 +8,6 @@
  * @author    Tomoaki Nagahara <tomoaki.nagahara@gmail.com>
  * @copyright Tomoaki Nagahara All right reserved.
  */
-
-/** namespace
- *
- * @created   2018-04-13
- */
-namespace OP\UNIT\NEWWORLD;
 
 /** Template
  *
@@ -27,18 +21,18 @@ class Template
 {
 	/** trait.
 	 */
-	use \OP_CORE;
+	use OP_CORE;
 
-	/** Stack arguments.
+	/** Search to this template directory.
 	 *
-	 * @var array
+	 * @var string
 	 */
-	private static $_args = [];
+	const _DIRECTORY_ = 'template-dir';
 
 	/** Return real file path from meta path.
 	 *
-	 * @param  string $meta_path
-	 * @return string $real_path
+	 * @param  string
+	 * @return string
 	 */
 	static function _GetTemplateFilePath($path)
 	{
@@ -52,38 +46,21 @@ class Template
 			return $path;
 		}
 
-		//	Get template directory.
-		if(!$dir = self::Directory() ){
-			\Notice::Set("Has not been set template directory.");
-			return false;
-		}
-
-		//	Generate full path.
-		$path = $dir . $path;
-
-		//	Check file exists.
-		if(!file_exists($path) ){
-			\Notice::Set("This file has not been found. ($path)");
-			return false;
+		//	Search to in template directory.
+		if( $dir  = Env::Get(self::_DIRECTORY_) ){
+			$path = rtrim(ConvertPath($dir), '/').'/'.$path;
+			if( file_exists($path) ){
+				//	File was found.
+				return $path;
+			}
 		}
 
 		//	...
-		return $path;
-	}
+		Notice::Set("Does not exists this file path. ($path)");
 
-	/** Get/Set template directory.
-	 *
-	 * @param  string $path
-	 * @return string $path
-	 */
-	static function Directory($path=null)
-	{
-		static $_directory;
-		if( $path ){
-			$_directory = rtrim(ConvertPath($path), '/').'/';
-		}
-		return $_directory;
-	} // Directory
+		//	...
+		return '';
+	}
 
 	/** Return executed file content.
 	 *
@@ -95,7 +72,7 @@ class Template
 	{
 		//	...
 		if(!ob_start()){
-			\Notice::Set("ob_start was failed.");
+			Notice::Set("ob_start was failed.");
 			return;
 		}
 
@@ -115,8 +92,8 @@ class Template
 	{
 		try {
 			//	...
-			if(!$file_path ){
-				\Notice::Set("Has not been set file path. ($file_path)");
+			if(!$file_path){
+				Notice::Set("Has not been set file path. ($file_path)");
 				return;
 			}
 
@@ -134,6 +111,9 @@ class Template
 			//	...
 			chdir( dirname($file_path) );
 
+			//	...
+		//	$io = include( basename($file_path) );
+
 			//	Limit the scope of variables.
 			call_user_func(function($file_path, $args) {
 				//	If a variable is passed.
@@ -142,49 +122,27 @@ class Template
 					if(!$count = extract($args, null, null)){
 						//	Maybe not assoc.
 						$message = "Passed arguments is not an assoc array. (count=$count)";
-						\Notice::Set($message, debug_backtrace());
+						Notice::Set($message, debug_backtrace());
 					}
 				}
 
-				//	...
-				self::$_args[] = $args;
-
 				//	Execute file. (Do output)
 				include( basename($file_path) );
-
-				//	...
-				array_pop(self::$_args);
-
 			}, $file_path, $args);
 
 			//	...
 			chdir($save);
 
-		} catch ( \Throwable $e ) {
-			\Notice::Set($e);
+		} catch (Throwable $e) {
+			$trace = $e->getTrace();
+			$temp  = [];
+			$temp['file'] = $e->getFile();
+			$temp['line'] = $e->getLine();
+			array_unshift($trace, $temp);
+			Notice::Set($e->getMessage(), $trace);
 		}
-	}
-
-	/** Get stacked arguments.
-	 *
-	 * @param  string  $key
-	 * @param  integer $deps
-	 * @return mixed
-	 */
-	static function Args( string $key, int $deps=0)
-	{
-		//	...
-		$i = count(self::$_args) - ($deps) -1;
 
 		//	...
-		return self::$_args[$i][$key] ?? null;
-	}
-
-	/** For developer.
-	 *
-	 */
-	static function Debug()
-	{
-		D(self::$_args);
+		return ifset($io) === false ? false: null;
 	}
 }
