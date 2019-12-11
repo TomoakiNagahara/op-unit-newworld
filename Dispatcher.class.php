@@ -30,7 +30,7 @@ class Dispatcher
 	 */
 	static function Run()
 	{
-		//	Execute app's end point. (app's controller)
+		//	Execute app's end point. (So-called controller)
 		$route = Router::Get();
 
 		//	Get current directory.
@@ -44,7 +44,7 @@ class Dispatcher
 			//	Execute end-point.
 			$content = Template::Get($route[Router::_END_POINT_]);
 		}catch( Exception $e ){
-			Notice::Set($e->getMessage(), $e->getTrace());
+			Notice::Set($e);
 		}
 
 		//	Recovery current directory.
