@@ -134,12 +134,7 @@ class Template
 			chdir($save);
 
 		} catch (Throwable $e) {
-			$trace = $e->getTrace();
-			$temp  = [];
-			$temp['file'] = $e->getFile();
-			$temp['line'] = $e->getLine();
-			array_unshift($trace, $temp);
-			Notice::Set($e->getMessage(), $trace);
+			Notice::Set($e);
 		}
 
 		//	...
